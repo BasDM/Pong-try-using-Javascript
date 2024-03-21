@@ -48,15 +48,20 @@ class Paddle {
 
 const bal = new Ball(380, 10, 20, "yellow");
 const paddle = new Paddle("red");
+const paddle2 = new Paddle("red");
+paddle2.x = 460;
 canvas.addEventListener("mousemove", function (e) {
   paddle.y = e.clientY - 35;
 });
 
 function hit() {
   return (
-    bal.x - bal.radius <= paddle.x + 20 &&
-    bal.y - bal.radius >= paddle.y &&
-    bal.y + bal.radius * 2 <= paddle.y + 70
+    (bal.x - bal.radius <= paddle.x + 20 &&
+      bal.y - bal.radius >= paddle.y &&
+      bal.y + bal.radius * 2 <= paddle.y + 70) ||
+    (bal.x >= paddle2.x &&
+      bal.y - bal.radius >= paddle2.y &&
+      bal.y + bal.radius * 2 <= paddle2.y + 70)
   );
 }
 
@@ -64,9 +69,10 @@ function loop() {
   ctx.clearRect(0, 0, 500, 500);
   bal.draw();
   paddle.draw();
+  paddle2.y = bal.y - 35;
+  paddle2.draw();
   if (hit()) {
     bal.vx *= -1;
-    bal.vy *= -1;
   }
   bal.update();
   requestAnimationFrame(loop);
